@@ -27,6 +27,7 @@ export default function Home({ account }) {
       <div className="flex items-center justify-center w-full h-screen">
         <div className="flex flex-col items-center w-full max-w-sm space-y-3">
           <h1>Using Next JS Iron Session</h1>
+          <img className="w-20 h-20 object-cover rounded-full" src={ account.avatar } alt={ account.name } />
           <h1>Welcome <span className="font-bold">{ account.name }</span></h1>
           <button className="w-full px-5 py-3 border border-yellow-300 focus:outline-none" onClick={handleLogout}>Logout</button>
         </div>
