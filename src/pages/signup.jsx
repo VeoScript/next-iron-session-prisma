@@ -2,14 +2,27 @@ import Head from 'next/head'
 import withSession from '~/lib/Session'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import toast, { Toaster } from 'react-hot-toast'
+import { PrismaClient } from '@prisma/client'
 
-export default function SignUp() {
+const prisma = new PrismaClient()
+
+export default function SignUp({ all_users }) {
 
   const router = useRouter()
   
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
 
   async function handleSignUp(formData) {
+    //check if the user is already exist
+    const userExist = all_users.some(user => user.username === formData.username)
+
+    if (userExist) {
+      toast.error('This account is already exist!')
+      return
+    }
+
+    //create or register new user
     await fetch('/api/signup', {
       method: 'POST',
       body: JSON.stringify(formData)
@@ -24,6 +37,10 @@ export default function SignUp() {
         <title>Sign Up</title>
       </Head>
       <div className="flex flex-row items-center justify-center w-full h-screen">
+        <Toaster
+          position="top-center"
+          reverseOrder={true}
+        />
         <div className="flex flex-col w-full max-w-sm space-y-3">
           <h1 className="font-bold text-xl">Sign Up</h1>
           <form className="flex flex-col w-full space-y-3" onSubmit={handleSubmit(handleSignUp)}>
@@ -64,7 +81,12 @@ export const getServerSideProps = withSession(async function ({ req }) {
     }
   }
 
+  //find all users from the database
+  const all_users = await prisma.user.findMany()
+
   return {
-    props: {}
+    props: {
+      all_users
+    }
   }
 })
