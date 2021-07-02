@@ -13,7 +13,7 @@ export default function Login({ all_users }) {
 
   const router = useRouter()
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
 
   async function handleLogin(formData) {
     const username = formData.username
@@ -46,7 +46,6 @@ export default function Login({ all_users }) {
       body: JSON.stringify({ username, password })
     })
     
-    console.log(formData)
     reset()
     router.push('/')
   }
@@ -65,14 +64,14 @@ export default function Login({ all_users }) {
           <h1 className="font-bold text-xl">Login Form</h1>
           <form className="flex flex-col w-full space-y-3" onSubmit={handleSubmit(handleLogin)}>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="username" placeholder="Username" {...register("username", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="text" name="username" placeholder="Username" {...register("username", { required: true })} disabled={ isSubmitting } />
               {errors.username && <span className="text-xs text-gray-700">Username is required.</span>}
             </div>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="password" name="password" placeholder="Password" {...register("password", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="password" name="password" placeholder="Password" {...register("password", { required: true })} disabled={ isSubmitting } />
               {errors.password && <span className="text-xs text-gray-700">Password is required.</span>}
             </div>
-            <button className="px-5 py-3 border border-yellow-300 focus:outline-none" type="submit">Login</button>
+            <button className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="submit" disabled={ isSubmitting }>Login</button>
             <div className="flex flex-row items-center w-full space-x-2">
               <hr className="border border-gray-300 opacity-30 w-full" />
               <span className="text-gray-600">or</span>
