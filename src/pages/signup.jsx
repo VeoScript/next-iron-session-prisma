@@ -1,0 +1,70 @@
+import Head from 'next/head'
+import withSession from '~/lib/Session'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+
+export default function SignUp() {
+
+  const router = useRouter()
+  
+  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+
+  async function handleSignUp(formData) {
+    await fetch('/api/signup', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    })
+    reset()
+    router.push('/login')
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Sign Up</title>
+      </Head>
+      <div className="flex flex-row items-center justify-center w-full h-screen">
+        <div className="flex flex-col w-full max-w-sm space-y-3">
+          <h1 className="font-bold text-xl">Sign Up</h1>
+          <form className="flex flex-col w-full space-y-3" onSubmit={handleSubmit(handleSignUp)}>
+            <div className="flex flex-col w-full space-y-1">
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="avatar" placeholder="Avatar URL" {...register("avatar", { required: true })} />
+              {errors.avatar && <span className="text-xs text-gray-700">Avatar URL is required</span>}
+            </div>
+            <div className="flex flex-col w-full space-y-1">
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="name" placeholder="Full Name" {...register("name", { required: true })} />
+              {errors.name && <span className="text-xs text-gray-700">Full Name is required</span>}
+            </div>
+            <div className="flex flex-col w-full space-y-1">
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="username" placeholder="Username" {...register("username", { required: true })} />
+              {errors.username && <span className="text-xs text-gray-700">Username is required</span>}
+            </div>
+            <div className="flex flex-col w-full space-y-1">
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="password" name="password" placeholder="Password" {...register("password", { required: true })} />
+              {errors.password && <span className="text-xs text-gray-700">Password is required</span>}
+            </div>
+            <button className="px-5 py-3 border border-yellow-300 focus:outline-none" type="submit">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export const getServerSideProps = withSession(async function ({ req }) {
+  //check the user session
+  const user = req.session.get('user')
+
+  if (user) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {}
+  }
+})
