@@ -7,7 +7,7 @@ export default function SignUp() {
 
   const router = useRouter()
   
-  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
 
   async function handleSignUp(formData) {
     await fetch('/api/signup', {
@@ -28,22 +28,22 @@ export default function SignUp() {
           <h1 className="font-bold text-xl">Sign Up</h1>
           <form className="flex flex-col w-full space-y-3" onSubmit={handleSubmit(handleSignUp)}>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="avatar" placeholder="Avatar URL" {...register("avatar", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="text" name="avatar" placeholder="Avatar URL" {...register("avatar", { required: true })} disabled={ isSubmitting } />
               {errors.avatar && <span className="text-xs text-gray-700">Avatar URL is required</span>}
             </div>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="name" placeholder="Full Name" {...register("name", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="text" name="name" placeholder="Full Name" {...register("name", { required: true })} disabled={ isSubmitting } />
               {errors.name && <span className="text-xs text-gray-700">Full Name is required</span>}
             </div>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="text" name="username" placeholder="Username" {...register("username", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="text" name="username" placeholder="Username" {...register("username", { required: true })} disabled={ isSubmitting } />
               {errors.username && <span className="text-xs text-gray-700">Username is required</span>}
             </div>
             <div className="flex flex-col w-full space-y-1">
-              <input className="px-5 py-3 border border-yellow-300 focus:outline-none" type="password" name="password" placeholder="Password" {...register("password", { required: true })} />
+              <input className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="password" name="password" placeholder="Password" {...register("password", { required: true })} disabled={ isSubmitting } />
               {errors.password && <span className="text-xs text-gray-700">Password is required</span>}
             </div>
-            <button className="px-5 py-3 border border-yellow-300 focus:outline-none" type="submit">Sign Up</button>
+            <button className="px-5 py-3 border border-yellow-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50" type="submit" disabled={ isSubmitting }>Sign Up</button>
           </form>
         </div>
       </div>
